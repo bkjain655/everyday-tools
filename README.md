@@ -1,12 +1,10 @@
-# DevToolkit - Multi-purpose Developer & User Tools
+# Everyday Tools - Multi-purpose Developer & User Tools
 
-![DevToolkit Logo](public/logo.png)
-
-DevToolkit is a comprehensive collection of utilities for developers and everyday users, built with Next.js 14, Tailwind CSS, and shadcn/ui components.
+This is a comprehensive collection of utilities for developers and everyday users, built with Next.js 14, Tailwind CSS, and radix/ui components.
 
 ## 🚀 Features
 
-DevToolkit includes a wide range of tools organized into categories:
+Everyday Tools includes a wide range of tools organized into categories:
 
 ### Developer Tools
 - UUID Generator - Create random UUIDs with different versions
@@ -37,21 +35,21 @@ DevToolkit includes a wide range of tools organized into categories:
 
 - [Next.js 14](https://nextjs.org/) - React framework
 - [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- [shadcn/ui](https://ui.shadcn.com/) - UI component library
+- [radix-ui](https://www.radix-ui.com/) - UI component library
 - [Tesseract.js](https://tesseract.projectnaptha.com/) - OCR engine
-- [QRCode.react](https://www.npmjs.com/package/qrcode.react) - QR code generation
+- QR code generation
 
 ## 📦 Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/devtoolkit.git
+git clone https://github.com/bkjain655/everyday-tools.git
 
 # Navigate to the project directory
-cd devtoolkit
+cd everyday-tools
 
 # Install dependencies
-npm install
+yarn
 
 # Start the development server
-npm run dev
+yarn dev
