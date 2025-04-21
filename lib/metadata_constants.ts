@@ -14,6 +14,7 @@ import { Metadata } from "next";
     alternates: {
       canonical: "/",
     },
+    icons: "/favicon/favicon.ico",
     openGraph: {
       type: "website",
       locale: "en_US",
@@ -24,7 +25,7 @@ import { Metadata } from "next";
       siteName: "Everyday Tools",
       images: [
         {
-          url: "/og-image.png",
+          url: "/favicon/favicon-32x32.png",
           width: 1200,
           height: 630,
           alt: "Everyday Tools - Free Online Utility Tools for Everyone",
@@ -36,8 +37,7 @@ import { Metadata } from "next";
       title: "Everyday Tools - Free Online Utility Tools for Everyone",
       description:
         "Access powerful online tools like OCR, JSON formatters, calculators, QR generators, and more with Everyday Tools.",
-      images: ["/twitter-image.png"],
-      creator: "@yourtwitterhandle",
+      images: ["/favicon/favicon-32x32.png"],
     },
     robots: {
       index: true,
