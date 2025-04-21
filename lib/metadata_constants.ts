@@ -10,7 +10,7 @@ import { Metadata } from "next";
     authors: [{ name: "BKJ Tech World" }],
     creator: "BKJ_Tech_World",
     publisher: "BKJ Tech World",
-    metadataBase: new URL("https://everyday-tools.vercel.app"),
+    metadataBase: new URL("https://everyday-toolstack.vercel.app"),
     alternates: {
       canonical: "/",
     },
@@ -18,7 +18,7 @@ import { Metadata } from "next";
     openGraph: {
       type: "website",
       locale: "en_US",
-      url: "https://everyday-tools.vercel.app",
+      url: "https://everyday-toolstack.vercel.app",
       title: "Everyday Tools - Free Online Utility Tools for Everyone",
       description:
         "Use Everyday Tools to simplify your daily tasks — from OCR to interest calculators, all in one place. Perfect for devs and non-tech users alike.",
