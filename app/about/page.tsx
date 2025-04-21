@@ -5,7 +5,7 @@ export default function AboutPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="text-center space-y-2">
-        <h1 className="text-4xl font-bold">About DevToolkit</h1>
+        <h1 className="text-4xl font-bold">About us</h1>
         <p className="text-xl text-muted-foreground">A collection of useful tools for developers and everyday users</p>
       </div>
 
@@ -16,7 +16,7 @@ export default function AboutPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <p>
-            DevToolkit was created to provide a comprehensive set of utilities that developers and everyday users need,
+            Everyday Tools was created to provide a comprehensive set of utilities that developers and everyday users need,
             all in one place. Our goal is to eliminate the need to search for and trust multiple websites for simple
             tasks like generating UUIDs, converting colors, or calculating loan payments.
           </p>
@@ -41,7 +41,7 @@ export default function AboutPage() {
       <Card>
         <CardHeader>
           <CardTitle>Features</CardTitle>
-          <CardDescription>What makes DevToolkit special</CardDescription>
+          <CardDescription>What makes Everyday Tools special</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid sm:grid-cols-2 gap-4">
@@ -72,7 +72,7 @@ export default function AboutPage() {
           <div className="space-y-2">
             <h3 className="text-lg font-medium">Technical Details</h3>
             <p>
-              DevToolkit is built with Next.js 14, Tailwind CSS, and React, providing a fast and responsive experience
+              Everyday Tools is built with Next.js 14, Tailwind CSS, and React, providing a fast and responsive experience
               across all devices. We use client-side processing for all tools, ensuring your data never leaves your
               browser.
             </p>

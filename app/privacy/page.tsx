@@ -15,13 +15,13 @@ export default function PrivacyPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <p>
-            At DevToolkit, we take your privacy seriously. This Privacy Policy explains how we collect, use, and protect
+            At Everyday Tools, we take your privacy seriously. This Privacy Policy explains how we collect, use, and protect
             your information when you use our website.
           </p>
 
           <h3 className="text-lg font-medium">Information We Don't Collect</h3>
           <p>
-            DevToolkit is designed with privacy in mind. All processing happens directly in your browser, and we do not
+            Everyday Tools is designed with privacy in mind. All processing happens directly in your browser, and we do not
             collect, store, or transmit:
           </p>
           <ul className="list-disc pl-5 space-y-1">
@@ -50,7 +50,7 @@ export default function PrivacyPage() {
           </p>
 
           <h3 className="text-lg font-medium">Third-Party Services</h3>
-          <p>DevToolkit may use the following third-party services:</p>
+          <p>Everyday Tools may use the following third-party services:</p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Vercel - For hosting our website</li>
             <li>Simple Analytics - For privacy-focused, anonymous usage statistics</li>
@@ -61,11 +61,6 @@ export default function PrivacyPage() {
           <p>
             We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new
             Privacy Policy on this page and updating the "Last updated" date.
-          </p>
-
-          <h3 className="text-lg font-medium">Contact Us</h3>
-          <p>
-            If you have any questions about this Privacy Policy, please contact us at privacy@devtoolkit.example.com.
           </p>
         </CardContent>
       </Card>

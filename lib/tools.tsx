@@ -37,7 +37,7 @@ export const tools = [
     description: "Count characters, words, and lines in text",
     href: "/tools/character-counter",
     icon: <Hash className="h-4 w-4" />,
-    category: "Text",
+    category: "Utility",
   },
   {
     name: "UUID Generator",
