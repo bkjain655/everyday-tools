@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import { tools } from "@/lib/tools"
+import { HomeLayout } from "./HomeLayout"
 
 export default function Home() {
   const categorizedTools = tools.reduce((acc, tool) => {
@@ -22,31 +23,7 @@ export default function Home() {
       </section>
 
       <section>
-        <div className="flex flex-col items-center mb-4 gap-2">
-        {categories.map((category) => (
-          <div key={category} className="px-8 w-full">
-            <h2 className="text-2xl font-semibold">{category}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {categorizedTools[category].map((tool) => (
-                <Card key={tool.href} className="hover:shadow-md transition-shadow">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="flex items-center gap-2">
-                      {tool.icon}
-                      {tool.name}
-                    </CardTitle>
-                    <CardDescription>{tool.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Link href={tool.href} passHref>
-                      <Button className="w-full">Open Tool</Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        ))}
-        </div>
+        <HomeLayout />
       </section>
     </div>
   )
