@@ -10,7 +10,7 @@ import { Metadata } from "next";
     authors: [{ name: "BKJ Tech World" }],
     creator: "BKJ_Tech_World",
     publisher: "BKJ Tech World",
-    metadataBase: new URL("https://everyday-toolstack.vercel.app"),
+    metadataBase: new URL("https://everydaytools.vercel.app"),
     alternates: {
       canonical: "/",
     },
@@ -18,7 +18,7 @@ import { Metadata } from "next";
     openGraph: {
       type: "website",
       locale: "en_US",
-      url: "https://everyday-toolstack.vercel.app",
+      url: "https://everydaytools.vercel.app",
       title: "Everyday Tools - Free Online Utility Tools for Everyone",
       description:
         "Use Everyday Tools to simplify your daily tasks — from OCR to interest calculators, all in one place. Perfect for devs and non-tech users alike.",
@@ -206,3 +206,28 @@ import { Metadata } from "next";
       canonical: "/random-number",
     },
   }  
+
+  export const imageConverterMetadata: Metadata = {
+    title: "Free Online Image Converter | Convert PNG, JPG, WEBP, HEIC | EverydayTools",
+    description:
+      "Convert images between multiple formats including PNG, JPG, WEBP, HEIC, GIF, and BMP. Free online image converter with no watermarks or registration required. All processing happens in your browser for complete privacy.",
+    keywords:
+      "image converter, png to jpg, jpg to png, webp converter, heic converter, image format converter, online image converter, free image converter, convert heic to jpg, convert webp to jpg",
+    openGraph: {
+      title: "Free Online Image Converter | Convert PNG, JPG, WEBP, HEIC | DevToolbox",
+      description:
+        "Convert images between multiple formats including PNG, JPG, WEBP, HEIC, GIF, and BMP. Free online tool with no watermarks or registration.",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Free Online Image Converter | Convert PNG, JPG, WEBP, HEIC",
+      description:
+        "Convert images between multiple formats including PNG, JPG, WEBP, HEIC, GIF, and BMP. Free online tool with no watermarks.",
+      images: ["/og-images/image-converter.png"],
+      site: "https://everydaytools.vercel.app",
+    },
+    alternates: {
+      canonical: "/tools/image-converter",
+    }
+  }

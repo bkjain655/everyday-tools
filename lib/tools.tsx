@@ -15,6 +15,7 @@ import {
   Palette,
   Cpu,
   Binary,
+  ImageIcon,
 } from "lucide-react"
 
 export const tools = [
@@ -30,6 +31,13 @@ export const tools = [
     description: "Convert images to base64 encoding",
     href: "/tools/image-to-base64",
     icon: <FileImage className="h-4 w-4" />,
+    category: "Image",
+  },
+  {
+    name: "Image Converter",
+    description: "Convert between image formats",
+    href: "/tools/image-converter",
+    icon: <ImageIcon className="h-4 w-4" />,
     category: "Image",
   },
   {
