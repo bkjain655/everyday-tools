@@ -98,7 +98,7 @@ export const HomeLayout = () => {
             />
         </div>
         {categories.map((category) => {
-            return filteredTools[category]?.length > 0 && <div key={category} className="px-8 w-full">
+            return filteredTools[category]?.length > 0 && <div key={category} className="p-4 w-full">
             <h2 className="text-2xl font-semibold">{category}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {filteredTools[category].map((tool) => (

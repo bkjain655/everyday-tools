@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { SITE_URL } from "./constants";
 
 // Generic metadata applicable to all pages
   export const genericMetadata: Metadata = {
@@ -10,7 +11,7 @@ import { Metadata } from "next";
     authors: [{ name: "BKJ Tech World" }],
     creator: "BKJ_Tech_World",
     publisher: "BKJ Tech World",
-    metadataBase: new URL("https://everydaytools.vercel.app"),
+    metadataBase: new URL(SITE_URL),
     alternates: {
       canonical: "/",
     },
@@ -18,7 +19,7 @@ import { Metadata } from "next";
     openGraph: {
       type: "website",
       locale: "en_US",
-      url: "https://everydaytools.vercel.app",
+      url: SITE_URL,
       title: "Everyday Tools - Free Online Utility Tools for Everyone",
       description:
         "Use Everyday Tools to simplify your daily tasks — from OCR to interest calculators, all in one place. Perfect for devs and non-tech users alike.",
@@ -225,7 +226,7 @@ import { Metadata } from "next";
       description:
         "Convert images between multiple formats including PNG, JPG, WEBP, HEIC, GIF, and BMP. Free online tool with no watermarks.",
       images: ["/og-images/image-converter.png"],
-      site: "https://everydaytools.vercel.app",
+      site: SITE_URL,
     },
     alternates: {
       canonical: "/tools/image-converter",

@@ -1,5 +1,20 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { SITE_URL } from "@/lib/constants"
+import { Metadata } from "next"
 import Link from "next/link"
+
+export const metadata: Metadata = {
+  title: "About Us | Everyday Tools",
+  authors: [{ name: "Everyday Tools" }],
+  description: "Explore Everyday Tools, a user-friendly online platform to handle different category of tools.",
+  openGraph: {
+    title: "About Us | Everyday Tools",
+    description: "Explore Everyday Tools, a user-friendly online platform to handle different category of tools.",
+    url: `${SITE_URL}/about`,
+    siteName: "Everyday Tools",
+    type: "website",
+  }
+}
 
 export default function AboutPage() {
   return (
