@@ -17,17 +17,28 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
+import Image from "next/image"
 
 export default function Navbar() {
   const pathname = usePathname()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  const pages = [
+    { name: "About Us", href: "/about" },
+    { name: "Contact Us", href: "/contact-us" },
+    { name: "Privacy Policy", href: "/privacy-policy" },
+    { name: "Terms & Conditions", href: "/terms-and-conditions" },
+  ]
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
+        
+        {/* Logo Section */}
         <div className="flex items-center gap-2 ml-4">
-          <Link href="/" className="font-bold text-xl">
-            Everyday Tools
+          <Link href="/" aria-label="Everyday Tools" className="flex items-center space-x-2">
+            <Image src="/favicon/android-chrome-192x192.png" alt="Logo" width={40} height={40} />
+            <span className="font-bold text-xl hidden sm:inline-block">Everyday Tools</span>
           </Link>
         </div>
 
@@ -61,6 +72,16 @@ export default function Navbar() {
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
+
+            {pages.map((page) => (
+              <NavigationMenuItem key={page.name}>
+                <Link href={page.href} legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    {page.name}
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            ))}
           </NavigationMenuList>
         </NavigationMenu>
 
@@ -94,6 +115,23 @@ export default function Navbar() {
               >
                 {tool.icon}
                 <span>{tool.name}</span>
+              </Link>
+            ))}
+          </div>
+          <div className="container py-4 grid grid-cols-2 gap-2">
+            {pages.map((page) => (
+              <Link
+                key={page.name}
+                href={page.href}
+                onClick={() => setIsMenuOpen(false)}
+                className={cn(
+                  "flex items-center gap-2 p-2 rounded-md",
+                  pathname === page.href
+                    ? "bg-secondary text-secondary-foreground"
+                    : "hover:bg-accent hover:text-accent-foreground",
+                )}
+              >
+                {page.name}
               </Link>
             ))}
           </div>
