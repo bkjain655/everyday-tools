@@ -3,8 +3,10 @@ import ToolLayout from "@/components/tool-layout"
 import { Card, CardContent } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { useEffect, useState } from "react"
+import { useToolUsage } from "@/lib/use-tool-usage"
 
 export const CharacterCounterLayout = () => {
+  const trackUse = useToolUsage("character-counter", "character_counter_count")
     const [text, setText] = useState("")
     const [stats, setStats] = useState({
       characters: 0,
@@ -42,7 +44,8 @@ export const CharacterCounterLayout = () => {
         paragraphs,
         lines,
       })
-    }, [text])
+      trackUse()
+    }, [text, trackUse])
   
     const StatCard = ({ title, value }: { title: string; value: number }) => {
         return (

@@ -8,9 +8,13 @@ import ToolLayout from "@/components/tool-layout"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowRight } from "lucide-react"
+import { useToolUsage } from "@/lib/use-tool-usage"
 
-// Conversion factors for different units
-const lengthUnits = {
+// Conversion factors for different units. Typed as a plain string map so units can
+// be looked up by the free-form `fromUnit`/`toUnit` state without an index error.
+type UnitTable = Record<string, number>
+
+const lengthUnits: UnitTable = {
   meter: 1,
   kilometer: 1000,
   centimeter: 0.01,
@@ -21,7 +25,7 @@ const lengthUnits = {
   inch: 0.0254,
 }
 
-const weightUnits = {
+const weightUnits: UnitTable = {
   kilogram: 1,
   gram: 0.001,
   milligram: 0.000001,
@@ -31,7 +35,7 @@ const weightUnits = {
   "us-ton": 907.185,
 }
 
-const volumeUnits = {
+const volumeUnits: UnitTable = {
   liter: 1,
   milliliter: 0.001,
   "cubic-meter": 1000,
@@ -42,7 +46,7 @@ const volumeUnits = {
   "fluid-ounce": 0.0295735,
 }
 
-const areaUnits = {
+const areaUnits: UnitTable = {
   "square-meter": 1,
   "square-kilometer": 1000000,
   "square-centimeter": 0.0001,
@@ -55,13 +59,13 @@ const areaUnits = {
   hectare: 10000,
 }
 
-const temperatureUnits = {
+const temperatureUnits: Record<string, string> = {
   celsius: "celsius",
   fahrenheit: "fahrenheit",
   kelvin: "kelvin",
 }
 
-const timeUnits = {
+const timeUnits: UnitTable = {
   second: 1,
   minute: 60,
   hour: 3600,
@@ -72,6 +76,7 @@ const timeUnits = {
 }
 
 export const MetricConverterLayout = () => {
+  const trackUse = useToolUsage("metric-converter", "metric_converter_convert")
   const [category, setCategory] = useState("length")
   const [fromUnit, setFromUnit] = useState("")
   const [toUnit, setToUnit] = useState("")
@@ -146,9 +151,12 @@ export const MetricConverterLayout = () => {
     }
 
     convert()
-  }, [category, fromUnit, toUnit, fromValue])
+    trackUse({ category, fromUnit, toUnit })
+  }, [category, fromUnit, toUnit, fromValue, trackUse])
 
-  const getUnitsForCategory = (cat: string) => {
+  // Temperature is handled separately (it is an offset conversion, not a factor),
+  // so this only ever returns factor tables to the conversion path.
+  const getUnitsForCategory = (cat: string): UnitTable | null => {
     switch (cat) {
       case "length":
         return lengthUnits
@@ -158,8 +166,6 @@ export const MetricConverterLayout = () => {
         return volumeUnits
       case "area":
         return areaUnits
-      case "temperature":
-        return temperatureUnits
       case "time":
         return timeUnits
       default:
@@ -218,7 +224,7 @@ export const MetricConverterLayout = () => {
                       <SelectValue placeholder="Select unit" />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.keys(getUnitsForCategory(cat) || {}).map((unit) => (
+                      {Object.keys(cat === "temperature" ? temperatureUnits : getUnitsForCategory(cat) || {}).map((unit) => (
                         <SelectItem key={unit} value={unit}>
                           {formatUnitName(unit)}
                         </SelectItem>
@@ -236,7 +242,7 @@ export const MetricConverterLayout = () => {
                       <SelectValue placeholder="Select unit" />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.keys(getUnitsForCategory(cat) || {}).map((unit) => (
+                      {Object.keys(cat === "temperature" ? temperatureUnits : getUnitsForCategory(cat) || {}).map((unit) => (
                         <SelectItem key={unit} value={unit}>
                           {formatUnitName(unit)}
                         </SelectItem>

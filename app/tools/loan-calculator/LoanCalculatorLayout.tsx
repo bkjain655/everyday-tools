@@ -9,8 +9,20 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useToolUsage } from "@/lib/use-tool-usage"
+
+interface AmortizationRow {
+  payment: number
+  emi: number
+  principal: number
+  interest: number
+  totalPrincipal: number
+  totalInterest: number
+  balance: number
+}
 
 export const LoanCalculatorLayout = () => {
+  const trackUse = useToolUsage("loan-calculator", "loan_calculator_calculate")
   // EMI Calculator State
   const [loanAmount, setLoanAmount] = useState(100000)
   const [interestRate, setInterestRate] = useState(8)
@@ -19,7 +31,7 @@ export const LoanCalculatorLayout = () => {
   const [emi, setEmi] = useState(0)
   const [totalInterest, setTotalInterest] = useState(0)
   const [totalPayment, setTotalPayment] = useState(0)
-  const [amortizationSchedule, setAmortizationSchedule] = useState<any[]>([])
+  const [amortizationSchedule, setAmortizationSchedule] = useState<AmortizationRow[]>([])
 
   // Calculate EMI and Amortization Schedule
   useEffect(() => {
@@ -79,7 +91,8 @@ export const LoanCalculatorLayout = () => {
     }
 
     calculateLoan()
-  }, [loanAmount, interestRate, loanTerm, loanTermUnit])
+    trackUse({ loanTermUnit })
+  }, [loanAmount, interestRate, loanTerm, loanTermUnit, trackUse])
 
   return (
     <ToolLayout title="Loan EMI Calculator" description="Calculate loan EMIs and payment schedules">

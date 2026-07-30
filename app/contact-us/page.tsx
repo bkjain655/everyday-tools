@@ -19,10 +19,13 @@ export const metadata: Metadata = {
     ],
     openGraph: {
         title: "Contact Us - Everyday Tools | Get in Touch",
-        description: "Have questions, feedback, or suggestions? Contact Everyday Tools. We're here to help with all your JSON tool needs!",
+        description: "Have questions, feedback, or suggestions? Contact Everyday Tools. We're here to help with all your everyday tool needs!",
         url: `${SITE_URL}/contact-us`,
         siteName: "Everyday Tools",
         type: "website",
+    },
+    alternates: {
+        canonical: "/contact-us",
     },
 }
 

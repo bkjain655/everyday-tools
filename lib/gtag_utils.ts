@@ -12,7 +12,7 @@ type GTagEvent = {
   action: GTAG_ACTION;
   category: GTAG_EVENT_CATEGORY;
   label: string;
-  value: any;
+  value: unknown;
 };
 
 export const gaCustomEvent = ({ action, category, label, value }: GTagEvent): void => {

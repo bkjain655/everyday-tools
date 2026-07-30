@@ -15,16 +15,16 @@ export const HomeLayout = () => {
         acc[tool.category].push(tool)
         return acc
     }, {} as Record<string, typeof tools>);
-    const [inputBase, setInputBase] = useState("ALL");
+    const [category, setCategory] = useState("ALL");
     const [filteredTools, setFilteredTools] = useState(defaultTools);
     
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value.toLowerCase();
         if (!value) {
-            onInputBaseChange(inputBase);
+            onCategoryChange(category);
             return;
         }
-        if (inputBase === "ALL") {
+        if (category === "ALL") {
             const newFilteredTools = tools.reduce((acc, tool) => {
                 if (tool.name.toLowerCase().includes(value) || tool.description.toLowerCase().includes(value)) {
                     if (!acc[tool.category]) {
@@ -38,7 +38,7 @@ export const HomeLayout = () => {
             setFilteredTools(newFilteredTools);
         } else {
             const newFilteredTools = tools.reduce((acc, tool) => {
-                if (tool.category === inputBase && (tool.name.toLowerCase().includes(value) || tool.description.toLowerCase().includes(value))) {
+                if (tool.category === category && (tool.name.toLowerCase().includes(value) || tool.description.toLowerCase().includes(value))) {
                     if (!acc[tool.category]) {
                         acc[tool.category] = []
                     }
@@ -50,8 +50,8 @@ export const HomeLayout = () => {
             setFilteredTools(newFilteredTools);
         }
     };
-    const onInputBaseChange = (value: string) => {
-        setInputBase(value);
+    const onCategoryChange = (value: string) => {
+        setCategory(value);
         if (value === "ALL") {
             setFilteredTools(defaultTools);
             return;
@@ -74,7 +74,7 @@ export const HomeLayout = () => {
         <div className="flex flex-row justify-end items-end mb-4 gap-2 w-full">
             <div className="space-y-2">
               <Label htmlFor="input-base">Input Base</Label>
-              <Select value={inputBase} onValueChange={onInputBaseChange}>
+              <Select value={category} onValueChange={onCategoryChange}>
                 <SelectTrigger id="input-base">
                   <SelectValue placeholder="Select base" />
                 </SelectTrigger>
@@ -90,18 +90,24 @@ export const HomeLayout = () => {
                 </SelectContent>
               </Select>
             </div>
-            <input
-                type="text"
-                placeholder="Search tools..."
-                onChange={handleSearchChange}
-                className="border border-gray-300 rounded-md p-2 w-full max-w-md"
-            />
+            <div className="w-full sm:max-w-md space-y-2">
+                <Label htmlFor="tool-search" className="sr-only">
+                    Search tools
+                </Label>
+                <input
+                    id="tool-search"
+                    type="search"
+                    placeholder="Search tools..."
+                    onChange={handleSearchChange}
+                    className="border border-input bg-background rounded-md p-2 w-full"
+                />
+            </div>
         </div>
-        {categories.map((category) => {
-            return filteredTools[category]?.length > 0 && <div key={category} className="p-4 w-full">
-            <h2 className="text-2xl font-semibold">{category}</h2>
+        {categories.map((groupName) => {
+            return filteredTools[groupName]?.length > 0 && <div key={groupName} className="p-4 w-full">
+            <h2 className="text-2xl font-semibold">{groupName}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {filteredTools[category].map((tool) => (
+                {filteredTools[groupName].map((tool) => (
                 <Card key={tool.href} className="hover:shadow-md transition-shadow">
                     <CardHeader className="pb-2">
                     <CardTitle className="flex items-center gap-2">

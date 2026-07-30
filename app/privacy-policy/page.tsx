@@ -21,6 +21,9 @@ export const metadata = {
         siteName: "Everyday Tools",
         type: "website"
     },
+    alternates: {
+        canonical: "/privacy-policy",
+    },
 };
   
 export default function PrivacyPolicy() {

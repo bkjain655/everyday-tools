@@ -10,19 +10,34 @@ import { Dropzone } from "@/components/ocr/Dropzone"
 import { PreviewList } from "@/components/ocr/PreviewList"
 import { ProcessedData } from "@/components/ocr/ProcessedData"
 import { IProcessedFile, PerformOCR } from "@/lib/ocr_utils/PerformOCR"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { gaCustomEvent } from "@/lib/gtag_utils"
 
 export const OcrToolLayout = () => {
   const [isProcessing, setIsProcessing] = useState(false)
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [processedFiles, setProcessedFiles] = useState<IProcessedFile[]>([]);
-  const processFiles = () => {
+  const [error, setError] = useState<string | null>(null);
+
+  const processFiles = async () => {
     setIsProcessing(true);
+    setError(null);
+    try {
       const ocr = new PerformOCR(selectedFiles);
-      ocr.processFiles().then((data: IProcessedFile[]) => {
-          console.log("In content the final callback", data)
-          setIsProcessing(false);
-          setProcessedFiles(data);
+      const data = await ocr.processFiles();
+      setProcessedFiles(data);
+      gaCustomEvent({
+        action: "btn_click",
+        category: "click",
+        label: "ocr_extract",
+        value: { tool: "ocr", fileCount: selectedFiles.length },
       });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Text extraction failed. Please try again.");
+      setProcessedFiles([]);
+    } finally {
+      setIsProcessing(false);
+    }
   }
 
   return (
@@ -46,8 +61,14 @@ export const OcrToolLayout = () => {
             onClick={() => {
                 setSelectedFiles([]);
                 setProcessedFiles([]);
+                setError(null);
             }}>Reset</Button>
-        </div>    
+        </div>
+        {error && (
+          <Alert variant="destructive" className="w-full">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
         {processedFiles.length > 0 && <ProcessedData files={processedFiles} />}
       </div>
     </ToolLayout>

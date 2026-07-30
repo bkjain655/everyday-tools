@@ -67,6 +67,7 @@ export const ProcessedData = ({ files }: { files: IProcessedFile[] }) => {
                     className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start"
                     key={i}
                   >
+                    {/* eslint-disable-next-line @next/next/no-img-element -- client-generated blob:/data: URL, not optimisable by next/image */}
                     <img
                       src={img}
                       alt="base64 context"

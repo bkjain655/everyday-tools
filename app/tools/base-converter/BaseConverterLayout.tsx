@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Copy, ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useToolUsage } from "@/lib/use-tool-usage"
 
 const bases = [
     { value: "2", label: "Binary (Base 2)" },
@@ -20,6 +21,7 @@ const bases = [
 ];
 
 export const BaseConverterLayout = () => {
+  const trackUse = useToolUsage("base-converter", "base_converter_convert")
     const [inputBase, setInputBase] = useState("10")
     const [outputBase, setOutputBase] = useState("2")
     const [inputValue, setInputValue] = useState("42")
@@ -80,7 +82,8 @@ export const BaseConverterLayout = () => {
         setError(`Conversion error: ${(err as Error).message}`)
         setOutputValue("")
       }
-    }, [inputValue, inputBase, outputBase])
+      trackUse({ inputBase, outputBase })
+    }, [inputValue, inputBase, outputBase, trackUse])
   
     const copyToClipboard = (text: string, type: string) => {
       navigator.clipboard.writeText(text)

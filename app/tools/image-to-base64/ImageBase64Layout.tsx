@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
 import { Upload } from "lucide-react"
 import ToolLayout from "@/components/tool-layout"
+import { gaCustomEvent } from "@/lib/gtag_utils"
 
 export const ImageToBase64Layout = () => {
   const [image, setImage] = useState<string | null>(null)
@@ -25,6 +26,12 @@ export const ImageToBase64Layout = () => {
       const result = event.target?.result as string
       setImage(result)
       setBase64(result)
+      gaCustomEvent({
+        action: "btn_click",
+        category: "click",
+        label: "image_to_base64_convert",
+        value: { tool: "image-to-base64", type: file.type },
+      })
     }
     reader.readAsDataURL(file)
   }
@@ -43,6 +50,7 @@ export const ImageToBase64Layout = () => {
 
         {image ? (
           <div className="space-y-4">
+            {/* eslint-disable-next-line @next/next/no-img-element -- client-generated blob:/data: URL, not optimisable by next/image */}
             <img
               src={image || "/placeholder.svg"}
               alt="Uploaded"
@@ -54,7 +62,7 @@ export const ImageToBase64Layout = () => {
 
             {/* Label that looks like a button */}
             <label htmlFor="image-upload" className="cursor-pointer">
-              <span className="inline-flex items-center px-4 py-2 border rounded-md bg-white text-sm font-medium text-gray-800 hover:bg-gray-100 transition">
+              <span className="inline-flex items-center px-4 py-2 border rounded-md bg-secondary text-sm font-medium text-secondary-foreground hover:bg-secondary/80 transition">
                 Change Image
               </span>
             </label>

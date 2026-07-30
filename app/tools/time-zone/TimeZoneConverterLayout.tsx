@@ -8,6 +8,7 @@ import ToolLayout from "@/components/tool-layout"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Clock, Plus, Trash2 } from "lucide-react"
+import { useToolUsage } from "@/lib/use-tool-usage"
 
 // List of time zones
 const timeZones = [
@@ -29,6 +30,7 @@ const timeZones = [
 ]
 
 export const TimeZoneConverterLayout = () => {
+  const trackUse = useToolUsage("time-zone", "time_zone_convert")
   const [date, setDate] = useState<Date>(new Date())
   const [sourceTime, setSourceTime] = useState("")
   const [sourceDate, setSourceDate] = useState("")
@@ -84,7 +86,8 @@ export const TimeZoneConverterLayout = () => {
     } catch (error) {
       console.error("Time conversion error:", error)
     }
-  }, [sourceTime, sourceDate, sourceTimeZone, targetTimeZones])
+    trackUse({ targets: targetTimeZones.length })
+  }, [sourceTime, sourceDate, sourceTimeZone, targetTimeZones, trackUse])
 
   // Helper function to get timezone offset in milliseconds
   const getTimezoneOffset = (timeZone: string, date: Date) => {

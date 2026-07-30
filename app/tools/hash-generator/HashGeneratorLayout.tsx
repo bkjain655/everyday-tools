@@ -11,6 +11,9 @@ import ToolLayout from "@/components/tool-layout"
 import { Copy, FileText, Upload } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { md5 } from "js-md5"
+import { gaCustomEvent } from "@/lib/gtag_utils"
 
 export const HashGeneratorLayout = () => {
   const [text, setText] = useState("")
@@ -29,11 +32,13 @@ export const HashGeneratorLayout = () => {
   })
   const [isProcessing, setIsProcessing] = useState(false)
   const [copied, setCopied] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const generateHashesFromText = async () => {
     if (!text) return
 
     setIsProcessing(true)
+    setError(null)
     const newHashes = { md5: "", sha1: "", sha256: "", sha512: "" }
 
     try {
@@ -57,8 +62,9 @@ export const HashGeneratorLayout = () => {
       }
 
       setHashes(newHashes)
-    } catch (error) {
-      console.error("Hash generation error:", error)
+      gaCustomEvent({ action: "btn_click", category: "click", label: "hash_generator_generate", value: { tool: "hash-generator", source: "text" } })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to generate hashes. Please try again.")
     } finally {
       setIsProcessing(false)
     }
@@ -68,6 +74,7 @@ export const HashGeneratorLayout = () => {
     if (!file) return
 
     setIsProcessing(true)
+    setError(null)
     const newHashes = { md5: "", sha1: "", sha256: "", sha512: "" }
 
     try {
@@ -91,14 +98,19 @@ export const HashGeneratorLayout = () => {
       }
 
       setHashes(newHashes)
-    } catch (error) {
-      console.error("Hash generation error:", error)
+      gaCustomEvent({ action: "btn_click", category: "click", label: "hash_generator_generate", value: { tool: "hash-generator", source: "file" } })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to generate hashes. Please try again.")
     } finally {
       setIsProcessing(false)
     }
   }
 
   const generateHash = async (data: Uint8Array, algorithm: string) => {
+    // WebCrypto deliberately omits MD5, so it is computed with a JS implementation.
+    if (algorithm === "MD5") {
+      return md5(data)
+    }
     const hashBuffer = await crypto.subtle.digest(algorithm, data)
     const hashArray = Array.from(new Uint8Array(hashBuffer))
     return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("")
@@ -252,6 +264,12 @@ export const HashGeneratorLayout = () => {
           </Button>
         </TabsContent>
       </Tabs>
+
+      {error && (
+        <Alert variant="destructive" className="mt-6">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
 
       {(hashes.md5 || hashes.sha1 || hashes.sha256 || hashes.sha512) && (
         <div className="mt-6 space-y-4">

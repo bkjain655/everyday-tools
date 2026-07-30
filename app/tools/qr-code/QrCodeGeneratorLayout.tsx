@@ -3,109 +3,22 @@
 import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Download, PlusCircleIcon, Trash2Icon } from "lucide-react"
+import { Download } from "lucide-react"
 import ToolLayout from "@/components/tool-layout"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {QRCodeCanvas} from "qrcode.react"
+import { gaCustomEvent } from "@/lib/gtag_utils"
 
 export const QrCodeGeneratorLayout = () => {
   const [text, setText] = useState("https://example.com")
   const [size, setSize] = useState(200);
-  const [contentType, setContentType] = useState("SINGLE");
-  const [contents, setContents] = useState<string[]>(["https://example.com"])
-
   const [bgColor, setBgColor] = useState("#FFFFFF")
   const [fgColor, setFgColor] = useState("#000000")
   const [errorLevel, setErrorLevel] = useState("M")
   const qrRef = useRef<HTMLDivElement>(null)
 
-  const handleAdd = () => {
-    setContents((prev) => [...prev, '']);
-    setText("");
-  }
-
-  const handleDelete = (index: number) => {
-    setContents((prev) => prev.slice(index, -1));
-  }
-
-  const handleChange = (index: number, value: string) => {
-    setContents((prev) => {
-      const newContents = [...prev];
-      newContents[index] = value;
-      return newContents;
-    });
-  }
-  const multipleInputs = (content: string, index: number) => {
-    return (
-      <div className="flex items-end space-x-3 w-full">
-      {/* Label and Input */}
-      <div className="flex flex-col w-full">
-        <Label htmlFor="text" className="text-sm text-slate-700 mb-1">
-          Text or URL
-        </Label>
-        <input
-          id="text"
-          value={content}
-          onChange={(e) => handleChange(index, e.target.value)}
-          placeholder="Enter text or URL"
-          className="border border-slate-300 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full text-sm"
-        />
-      </div>
-
-      {/* Action Icons */}
-      <button
-        onClick={handleAdd}
-        className="p-2 rounded-md hover:bg-slate-100 transition-colors"
-        title="Add"
-        type="button"
-      >
-        <PlusCircleIcon className="text-blue-600" size={20} />
-      </button>
-
-      <button
-        onClick={() => handleDelete(index)}
-        className="p-2 rounded-md hover:bg-slate-100 transition-colors"
-        title="Delete"
-        type="button"
-      >
-        <Trash2Icon className="text-red-500" size={20} />
-      </button>
-    </div>
-    );
-  }
-  const qrCodeContent = () => {
-    return (
-      <>
-        <div className="space-y-2">
-          <p className="text-sm font-medium text-slate-700">Content Type:</p>
-          
-          <RadioGroup
-            className="flex flex-row gap-6"
-            name="contentType"
-            value={contentType}
-            onValueChange={(value) => {
-              setContentType(value);
-            }}
-          >
-            <RadioGroupItem value="SINGLE" />
-            <Label htmlFor="SINGLE">Single </Label>
-            <RadioGroupItem value="MULTIPLE" /> 
-            <Label htmlFor="MULTIPLE">Multiple</Label>
-          </RadioGroup>
-        </div>
-        {contentType === 'SINGLE' && <div className="space-y-2">
-          <Label htmlFor="text">Text or URL</Label>
-          <Input id="text" value={text} onChange={(e) => setText(e.target.value)} placeholder="Enter text or URL" />
-        </div>}
-        {contentType === 'MULTIPLE' && 
-          (contents.map((content, index) => multipleInputs(content, index)))
-        }
-      </>
-    );
-  }
   const downloadQRCode = () => {
     if (!qrRef.current) return
 
@@ -117,6 +30,7 @@ export const QrCodeGeneratorLayout = () => {
     link.download = "qrcode.png"
     link.href = url
     link.click()
+    gaCustomEvent({ action: "btn_click", category: "click", label: "qr_code_download", value: { tool: "qr-code", errorLevel, size } })
   }
 
   return (

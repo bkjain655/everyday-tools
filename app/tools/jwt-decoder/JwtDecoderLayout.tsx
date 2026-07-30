@@ -8,11 +8,32 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ToolLayout from "@/components/tool-layout"
 import { AlertCircle, CheckCircle2 } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { gaCustomEvent } from "@/lib/gtag_utils"
+
+// base64url -> UTF-8 JSON string. `atob` needs standard base64 with padding.
+const decodeBase64Url = (segment: string): string => {
+  const base64 = segment.replace(/-/g, "+").replace(/_/g, "/")
+  const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), "=")
+  const binary = atob(padded)
+  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0))
+  return new TextDecoder("utf-8").decode(bytes)
+}
+
+interface JwtPayload {
+  sub?: string
+  iss?: string
+  aud?: string | string[]
+  exp?: number
+  nbf?: number
+  iat?: number
+  jti?: string
+  [key: string]: unknown
+}
 
 export const JwtDecoderLayout = () => {
   const [jwt, setJwt] = useState("")
-  const [decodedHeader, setDecodedHeader] = useState<any>(null)
-  const [decodedPayload, setDecodedPayload] = useState<any>(null)
+  const [decodedHeader, setDecodedHeader] = useState<Record<string, unknown> | null>(null)
+  const [decodedPayload, setDecodedPayload] = useState<JwtPayload | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   const decodeJwt = () => {
@@ -35,17 +56,19 @@ export const JwtDecoderLayout = () => {
       }
 
       // Decode header
-      const headerBase64 = parts[0]
-      const headerJson = atob(headerBase64.replace(/-/g, "+").replace(/_/g, "/"))
-      const header = JSON.parse(headerJson)
+      const header = JSON.parse(decodeBase64Url(parts[0]))
 
       // Decode payload
-      const payloadBase64 = parts[1]
-      const payloadJson = atob(payloadBase64.replace(/-/g, "+").replace(/_/g, "/"))
-      const payload = JSON.parse(payloadJson)
+      const payload = JSON.parse(decodeBase64Url(parts[1]))
 
       setDecodedHeader(header)
       setDecodedPayload(payload)
+      gaCustomEvent({
+        action: "btn_click",
+        category: "click",
+        label: "jwt_decoder_decode",
+        value: { tool: "jwt-decoder", alg: header?.alg ?? "unknown" },
+      })
 
       // Check if token is expired
       if (payload.exp) {
@@ -56,14 +79,13 @@ export const JwtDecoderLayout = () => {
           setError(`Token expired on ${expiryDate.toLocaleString()}`)
         }
       }
-    } catch (err) {
+    } catch {
       setError("Failed to decode JWT. Make sure it's a valid token.")
-      console.error(err)
     }
   }
 
   return (
-    <ToolLayout title="JWT Decoder" description="Decode and verify JWT tokens">
+    <ToolLayout title="JWT Decoder" description="Decode JWT headers and payloads in your browser">
       <div className="grid gap-6">
         <div className="space-y-2">
           <Textarea
@@ -89,9 +111,10 @@ export const JwtDecoderLayout = () => {
         {decodedPayload && !error && decodedPayload.exp && new Date() < new Date(decodedPayload.exp * 1000) && (
           <Alert variant="default" className="bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-400">
             <CheckCircle2 className="h-4 w-4" />
-            <AlertTitle>Valid Token</AlertTitle>
+            <AlertTitle>Token Not Expired</AlertTitle>
             <AlertDescription>
-              This token is currently valid and will expire on {new Date(decodedPayload.exp * 1000).toLocaleString()}
+              This token expires on {new Date(decodedPayload.exp * 1000).toLocaleString()}. The signature is not
+              verified by this tool.
             </AlertDescription>
           </Alert>
         )}

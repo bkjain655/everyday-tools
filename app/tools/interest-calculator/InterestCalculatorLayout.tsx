@@ -8,8 +8,10 @@ import ToolLayout from "@/components/tool-layout"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useToolUsage } from "@/lib/use-tool-usage"
 
 export const InterestCalculatorLayout = () => {
+  const trackUse = useToolUsage("interest-calculator", "interest_calculator_calculate")
   // Simple Interest State
   const [simpleAmount, setSimpleAmount] = useState(10000)
   const [simpleRate, setSimpleRate] = useState(5)
@@ -43,7 +45,8 @@ export const InterestCalculatorLayout = () => {
     }
 
     calculateSimpleInterest()
-  }, [simpleAmount, simpleRate, simpleTime, simpleTimeUnit])
+    trackUse({ mode: "simple" })
+  }, [simpleAmount, simpleRate, simpleTime, simpleTimeUnit, trackUse])
 
   // Calculate Compound Interest
   useEffect(() => {
@@ -78,7 +81,8 @@ export const InterestCalculatorLayout = () => {
     }
 
     calculateCompoundInterest()
-  }, [compoundAmount, compoundRate, compoundTime, compoundFrequency])
+    trackUse({ mode: "compound" })
+  }, [compoundAmount, compoundRate, compoundTime, compoundFrequency, trackUse])
 
   return (
     <ToolLayout title="Interest Calculator" description="Calculate simple and compound interest">

@@ -5,7 +5,6 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
-import './globals.css'
 import Script from "next/script";
 import { GA_TRACKING_ID } from "@/lib/gtag_utils"
 import { GoogleAnalyticsProvider } from "@/hooks/GoogleAnalyticsProvider"
@@ -37,16 +36,18 @@ export default function RootLayout({
                 gtag('config', '${GA_TRACKING_ID}', { page_path: window.location.pathname });`
             }
         </Script>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1302626070893007"
-          crossOrigin="anonymous"></script>
-        <script async src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" integrity="sha512-q+4liFwdPC/bNdhUpZx6aXDx/h77yEQtn4I1slHydcbZK34nLaR3cAeYSJshoxIOq3mjEf7xJE8YWIUHMn+oCQ==" crossOrigin="anonymous" referrerPolicy="no-referrer"></script>
-        <script async src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js" integrity="sha512-BbrZ76UNZq5BhH7LL7pn9A4TKQpQeNCHOo65/akfelcIBbcVvYWOFQKPXIrykE3qZxYjmDX573oa4Ywsc7rpTw==" crossOrigin="anonymous" referrerPolicy="no-referrer"></script>          
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <div className="flex min-h-screen flex-col">
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow-lg focus:ring-2 focus:ring-ring"
+            >
+              Skip to content
+            </a>
             <Navbar />
-            <main className="flex-1 container mx-auto px-4 py-6">{children}</main>
+            <main id="main-content" className="flex-1 container mx-auto px-4 py-6">{children}</main>
             <Footer />
           </div>
         </ThemeProvider>

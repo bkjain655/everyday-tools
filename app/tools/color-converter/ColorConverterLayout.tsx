@@ -8,14 +8,17 @@ import ToolLayout from "@/components/tool-layout"
 import { Label } from "@/components/ui/label"
 import { Copy } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useToolUsage } from "@/lib/use-tool-usage"
 
 export const ColorConverterLayout = () => {
+  const trackUse = useToolUsage("color-converter", "color_converter_convert")
   const [hex, setHex] = useState("#1e90ff")
   const [rgb, setRgb] = useState({ r: 30, g: 144, b: 255 })
   const [hsl, setHsl] = useState({ h: 210, s: 100, l: 56 })
   const [copied, setCopied] = useState<string | null>(null)
 
   const convertHEXToRGB = (hex: string) => {
+    trackUse({ from: "hex" })
     if (hex.match(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/)) {
       // Convert HEX to RGB
       let r = 0,
@@ -49,8 +52,8 @@ export const ColorConverterLayout = () => {
     const delta = max - min
 
     let h = 0,
-      s = 0,
-      l = (max + min) / 2
+      s = 0
+    const l = (max + min) / 2
 
     if (delta !== 0) {
       s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min)

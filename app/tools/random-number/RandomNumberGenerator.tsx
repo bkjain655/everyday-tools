@@ -9,6 +9,7 @@ import ToolLayout from "@/components/tool-layout"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Slider } from "@/components/ui/slider"
+import { gaCustomEvent } from "@/lib/gtag_utils"
 
 export const RandomNumberGenerator = () => {
   const [min, setMin] = useState(1)
@@ -58,6 +59,7 @@ export const RandomNumberGenerator = () => {
 
     setNumbers(result)
     setCopied(false)
+    gaCustomEvent({ action: "btn_click", category: "click", label: "random_number_generate", value: { tool: "random-number", count, allowDuplicates } })
   }
 
   const copyToClipboard = () => {

@@ -8,6 +8,7 @@ import { Copy, RefreshCw } from "lucide-react"
 import ToolLayout from "@/components/tool-layout"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
+import { gaCustomEvent } from "@/lib/gtag_utils"
 
 export const UuidGeneratorLayout = () => {
   const [uuids, setUuids] = useState<string[]>([])
@@ -34,6 +35,7 @@ export const UuidGeneratorLayout = () => {
 
     setUuids(newUuids)
     setCopied(null)
+    gaCustomEvent({ action: "btn_click", category: "click", label: "uuid_generator_generate", value: { tool: "uuid-generator", version, count } })
   }
 
   const copyToClipboard = (text: string, index: number) => {

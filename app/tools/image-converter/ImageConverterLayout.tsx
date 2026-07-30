@@ -14,22 +14,13 @@ import ToolLayout from "@/components/tool-layout"
 import { Download, FileImage } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import convert from "heic-convert/browser";
-// Supported image formats
-const inputFormats = [
-  { value: "image/png", label: "PNG" },
-  { value: "image/jpeg", label: "JPEG/JPG" },
-  { value: "image/webp", label: "WEBP" },
-  { value: "image/gif", label: "GIF" },
-  { value: "image/heic", label: "HEIC" },
-  { value: "image/bmp", label: "BMP" },
-]
+import { gaCustomEvent } from "@/lib/gtag_utils"
 
+// Output formats limited to what canvas.toBlob can actually encode.
 const outputFormats = [
   { value: "image/png", label: "PNG", extension: "png" },
   { value: "image/jpeg", label: "JPEG/JPG", extension: "jpg" },
   { value: "image/webp", label: "WEBP", extension: "webp" },
-  { value: "image/gif", label: "GIF", extension: "gif" },
-  { value: "image/bmp", label: "BMP", extension: "bmp" },
 ]
 
 export default function ImageConverterLayout() {
@@ -154,6 +145,12 @@ export default function ImageConverterLayout() {
 
             const url = URL.createObjectURL(blob)
             setConvertedUrl(url)
+            gaCustomEvent({
+              action: "btn_click",
+              category: "click",
+              label: "image_converter_convert",
+              value: { tool: "image-converter", outputFormat: mimeType },
+            })
 
             // Get converted image info
             const convertedImg = new Image()
@@ -220,6 +217,7 @@ export default function ImageConverterLayout() {
 
                 {previewUrl ? (
                 <div className="space-y-4">
+                    {/* eslint-disable-next-line @next/next/no-img-element -- client-generated blob:/data: URL, not optimisable by next/image */}
                     <img
                     src={previewUrl || "/placeholder.svg"}
                     alt="Uploaded"
@@ -237,7 +235,7 @@ export default function ImageConverterLayout() {
 
                     {/* Label that looks like a button */}
                     <label htmlFor="image-upload" className="cursor-pointer">
-                    <span className="inline-flex items-center px-4 py-2 border rounded-md bg-white text-sm font-medium text-gray-800 hover:bg-gray-100 transition">
+                    <span className="inline-flex items-center px-4 py-2 border rounded-md bg-secondary text-sm font-medium text-secondary-foreground hover:bg-secondary/80 transition">
                         Change Image
                     </span>
                     </label>
@@ -294,6 +292,7 @@ export default function ImageConverterLayout() {
                   <div className="space-y-4">
                     <h3 className="text-lg font-medium">Converted Image</h3>
                     <div className="flex flex-col items-center border rounded-lg p-6">
+                      {/* eslint-disable-next-line @next/next/no-img-element -- client-generated blob:/data: URL, not optimisable by next/image */}
                       <img
                         src={convertedUrl || "/placeholder.svg"}
                         alt="Converted"
@@ -359,14 +358,8 @@ export default function ImageConverterLayout() {
                   JPEG with similar quality.
                 </p>
                 <p>
-                  <strong>GIF:</strong> Supports animation and transparency. Limited to 256 colors.
-                </p>
-                <p>
-                  <strong>HEIC:</strong> High Efficiency Image Format used by iOS devices. Offers better compression
-                  than JPEG.
-                </p>
-                <p>
-                  <strong>BMP:</strong> Uncompressed format. Large file size but no quality loss.
+                  <strong>HEIC:</strong> High Efficiency Image Format used by iOS devices. Accepted as input and
+                  converted to JPEG automatically.
                 </p>
               </div>
             </div>

@@ -13,7 +13,6 @@ import {
   Calendar,
   BarChart,
   Palette,
-  Cpu,
   Binary,
   ImageIcon,
 } from "lucide-react"

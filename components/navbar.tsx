@@ -37,7 +37,7 @@ export default function Navbar() {
         {/* Logo Section */}
         <div className="flex items-center gap-2 ml-4">
           <Link href="/" aria-label="Everyday Tools" className="flex items-center space-x-2">
-            <Image src="/favicon/android-chrome-192x192.png" alt="Logo" width={40} height={40} />
+            <Image src="/favicon/android-chrome-192x192.png" alt="" width={40} height={40} sizes="40px" priority />
             <span className="font-bold text-xl hidden sm:inline-block">Everyday Tools</span>
           </Link>
         </div>

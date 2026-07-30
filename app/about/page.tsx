@@ -13,7 +13,10 @@ export const metadata: Metadata = {
     url: `${SITE_URL}/about`,
     siteName: "Everyday Tools",
     type: "website",
-  }
+  },
+  alternates: {
+    canonical: "/about",
+  },
 }
 
 export default function AboutPage() {
@@ -87,7 +90,7 @@ export default function AboutPage() {
           <div className="space-y-2">
             <h3 className="text-lg font-medium">Technical Details</h3>
             <p>
-              Everyday Tools is built with Next.js 14, Tailwind CSS, and React, providing a fast and responsive experience
+              Everyday Tools is built with Next.js 15, Tailwind CSS, and React, providing a fast and responsive experience
               across all devices. We use client-side processing for all tools, ensuring your data never leaves your
               browser.
             </p>

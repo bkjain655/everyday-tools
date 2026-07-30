@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "short_name": "",
+  "name": "Everyday Tools",
+  "short_name": "Everyday Tools",
   "icons": [
     {
       "src": "/favicon/android-chrome-192x192.png",
@@ -15,5 +15,7 @@
   ],
   "theme_color": "#ffffff",
   "background_color": "#ffffff",
-  "display": "standalone"
+  "display": "standalone",
+  "description": "Free, privacy-friendly online tools for developers and everyday users.",
+  "start_url": "/"
 }

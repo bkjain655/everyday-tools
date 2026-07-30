@@ -13,8 +13,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon, Plus } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
+import { useToolUsage } from "@/lib/use-tool-usage"
 
 export const DateCalculatorLayout = () => {
+  const trackUse = useToolUsage("date-calculator", "date_calculator_calculate")
   // Date Difference State
   const [startDate, setStartDate] = useState<Date | undefined>(new Date())
   const [endDate, setEndDate] = useState<Date | undefined>(new Date())
@@ -82,7 +84,8 @@ export const DateCalculatorLayout = () => {
       totalMinutes,
       totalSeconds,
     })
-  }, [startDate, endDate])
+    trackUse({ mode: "difference" })
+  }, [startDate, endDate, trackUse])
 
   // Calculate date add/subtract
   useEffect(() => {
@@ -106,7 +109,8 @@ export const DateCalculatorLayout = () => {
     }
 
     setResultDate(date)
-  }, [baseDate, operation, amount, unit])
+    trackUse({ mode: "add-subtract" })
+  }, [baseDate, operation, amount, unit, trackUse])
 
   return (
     <ToolLayout title="Date Calculator" description="Calculate differences between dates and add/subtract time">
