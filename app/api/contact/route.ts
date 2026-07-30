@@ -1,10 +1,10 @@
 // app/api/contact/route.ts
 import { NextRequest, NextResponse } from "next/server"
-import nodemailer from "nodemailer"
+import { Resend } from "resend"
 import { z } from "zod"
 import { getClientIp, rateLimit } from "@/lib/rate-limit"
 
-const { EMAIL_USER, EMAIL_PASS } = process.env
+const { RESEND_API_KEY, CONTACT_TO_EMAIL, CONTACT_FROM_EMAIL } = process.env
 
 // Anything that reaches a mail header must not be able to start a new one.
 const stripHeaderBreaks = (value: string) => value.replace(/[\r\n]+/g, " ").trim()
@@ -50,36 +50,36 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, message: "Email sent successfully" })
   }
 
-  if (!EMAIL_USER || !EMAIL_PASS) {
-    console.error("Contact form is not configured: EMAIL_USER/EMAIL_PASS missing")
-    return NextResponse.json({ success: false, message: "Failed to send email" }, { status: 500 })
+  if (!RESEND_API_KEY || !CONTACT_TO_EMAIL || !CONTACT_FROM_EMAIL) {
+    console.error(
+      "Contact form is not configured: RESEND_API_KEY, CONTACT_TO_EMAIL and CONTACT_FROM_EMAIL are all required.",
+    )
+    return NextResponse.json({ success: false, message: "Failed to send email" }, { status: 503 })
   }
 
-  const transporter = nodemailer.createTransport({
-    service: "Gmail",
-    auth: {
-      user: EMAIL_USER, // Your Gmail
-      pass: EMAIL_PASS, // Your App Password
-    },
-  })
+  const resend = new Resend(RESEND_API_KEY)
 
-  const mailOptions = {
-    // Gmail only accepts the authenticated account as the sender; the visitor's
-    // address goes on replyTo so it can never be injected into a header.
-    from: EMAIL_USER,
-    to: EMAIL_USER, // Send email to yourself
-    replyTo: stripHeaderBreaks(email),
-    subject: stripHeaderBreaks(`New message from ${name}`).slice(0, 150),
-    text: `
+  try {
+    // `from` is a verified sender we control; the visitor's address is only ever
+    // used as replyTo so it can never be injected into a header.
+    const { error } = await resend.emails.send({
+      from: CONTACT_FROM_EMAIL,
+      to: CONTACT_TO_EMAIL,
+      replyTo: stripHeaderBreaks(email),
+      subject: stripHeaderBreaks(`[Everyday Tools] New message from ${name}`).slice(0, 150),
+      text: `
 Name: ${name}
 Email: ${email}
 Contact Number: ${contact}
 Message: ${message}
     `,
-  }
+    })
 
-  try {
-    await transporter.sendMail(mailOptions)
+    if (error) {
+      console.error("Resend rejected the contact email:", error)
+      return NextResponse.json({ success: false, message: "Failed to send email" }, { status: 502 })
+    }
+
     return NextResponse.json({ success: true, message: "Email sent successfully" })
   } catch (error) {
     console.error("Email sending error:", error)
