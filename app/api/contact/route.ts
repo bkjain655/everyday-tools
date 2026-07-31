@@ -4,8 +4,6 @@ import { Resend } from "resend"
 import { z } from "zod"
 import { getClientIp, rateLimit } from "@/lib/rate-limit"
 
-const { RESEND_API_KEY, CONTACT_TO_EMAIL, CONTACT_FROM_EMAIL } = process.env
-
 // Anything that reaches a mail header must not be able to start a new one.
 const stripHeaderBreaks = (value: string) => value.replace(/[\r\n]+/g, " ").trim()
 
@@ -50,10 +48,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, message: "Email sent successfully" })
   }
 
+  // Read config at request time (not module scope) so Vercel's runtime env is
+  // always used. Log exactly which var is missing to make setup issues obvious.
+  const RESEND_API_KEY = process.env.RESEND_API_KEY
+  const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL
+  const CONTACT_FROM_EMAIL = process.env.CONTACT_FROM_EMAIL
+
   if (!RESEND_API_KEY || !CONTACT_TO_EMAIL || !CONTACT_FROM_EMAIL) {
-    console.error(
-      "Contact form is not configured: RESEND_API_KEY, CONTACT_TO_EMAIL and CONTACT_FROM_EMAIL are all required.",
-    )
+    const missing = [
+      !RESEND_API_KEY && "RESEND_API_KEY",
+      !CONTACT_TO_EMAIL && "CONTACT_TO_EMAIL",
+      !CONTACT_FROM_EMAIL && "CONTACT_FROM_EMAIL",
+    ].filter(Boolean)
+    console.error(`Contact form is not configured — missing: ${missing.join(", ")}`)
     return NextResponse.json({ success: false, message: "Failed to send email" }, { status: 503 })
   }
 
