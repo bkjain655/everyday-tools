@@ -1,6 +1,6 @@
 // Set NEXT_PUBLIC_SITE_URL in the deployment environment (e.g. a custom domain).
 // Falls back to the current production deployment.
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://everydaytools.vercel.app").replace(/\/$/, "")
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://tools.bkjlabs.com").replace(/\/$/, "")
 
 export const SITE_NAME = "Everyday Tools"
 
