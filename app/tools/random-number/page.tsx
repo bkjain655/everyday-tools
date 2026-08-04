@@ -1,10 +1,14 @@
 import { Metadata } from "next";
 import { randomNumberGeneratorMetadata } from "@/lib/metadata_constants";
+import { ToolJsonLd } from "@/components/tool-json-ld";
 import { RandomNumberGenerator } from "./RandomNumberGenerator";
 
 export const metadata: Metadata = randomNumberGeneratorMetadata;
 export default function RandomNumberPage() {
   return (
-    <RandomNumberGenerator />
+    <>
+      <ToolJsonLd href="/tools/random-number" />
+      <RandomNumberGenerator />
+    </>
   )
 }
