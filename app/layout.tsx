@@ -11,6 +11,7 @@ import { GoogleAnalyticsProvider } from "@/hooks/GoogleAnalyticsProvider"
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ToasterWrapper } from "@/components/toaster-wrapper"
+import { AppCommandPalette } from "@/components/app-command-palette"
 import { genericMetadata } from "@/lib/metadata_constants"
 const inter = Inter({ subsets: ["latin"] })
 
@@ -55,6 +56,7 @@ export default function RootLayout({
         <GoogleAnalyticsProvider />
         <Analytics />
         <ToasterWrapper />
+        <AppCommandPalette />
       </body>
     </html>
   )

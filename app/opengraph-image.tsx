@@ -26,7 +26,7 @@ export default function OpengraphImage() {
             fontSize: 26,
             letterSpacing: 6,
             textTransform: "uppercase",
-            color: "#7dd3fc",
+            color: "#93a5ff",
           }}
         >
           everydaytools

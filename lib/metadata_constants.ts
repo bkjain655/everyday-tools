@@ -8,10 +8,14 @@ import { SITE_URL } from "./constants";
       "A powerful collection of free online tools for daily tasks including OCR, calculators, formatters, converters, and more. Designed for developers and everyday users alike.",
     keywords:
       "online tools, everyday tools, OCR, UUID generator, QR code, calculator, image to text, base64, color converter, hash generator, EMI calculator, date calculator",
-    authors: [{ name: "BKJ Tech World" }],
-    creator: "BKJ_Tech_World",
-    publisher: "BKJ Tech World",
+    authors: [{ name: "BKJ Labs" }],
+    creator: "Bhavesh Kumar",
+    publisher: "BKJ Labs",
     metadataBase: new URL(SITE_URL),
+    // Google Search Console "HTML tag" verification (unset = no tag emitted).
+    verification: {
+      google: process.env.GOOGLE_SITE_VERIFICATION,
+    },
     alternates: {
       canonical: "/",
     },
