@@ -31,10 +31,12 @@ export default function RootLayout({
         </Script>
         <Script id="ga-analytics-init" strategy="afterInteractive">
             {
+                // send_page_view: false - GoogleAnalyticsProvider owns pageviews,
+                // including the initial one, so they are not counted twice.
                 `window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('config', '${GA_TRACKING_ID}', { page_path: window.location.pathname });`
+                gtag('config', '${GA_TRACKING_ID}', { send_page_view: false });`
             }
         </Script>
       </head>
