@@ -1,4 +1,9 @@
-export const GA_TRACKING_ID = process.env.NODE_ENV === "production" ? "G-YF0MZF0GGG" : "G-J3MNQZE15J";
+// GA4 measurement ID for THIS site (tools.bkjlabs.com → its own property).
+// Set NEXT_PUBLIC_GA_MEASUREMENT_ID in the deployment env to override; otherwise
+// it falls back to this site's ID in production, and is disabled in dev.
+export const GA_TRACKING_ID =
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ||
+  (process.env.NODE_ENV === "production" ? "G-1YJM28X3Y8" : "");
 
 // The gtag `config` call in the root layout runs with `send_page_view: false`,
 // so GoogleAnalyticsProvider sends every pageview - including the first one -
