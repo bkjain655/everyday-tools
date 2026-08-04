@@ -1,130 +1,94 @@
 "use client";
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
+import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
+import { ArrowRight, Search } from "lucide-react"
 import { tools } from "@/lib/tools"
-import { useState } from "react"
+import { useMemo, useState } from "react"
+import { cn } from "@/lib/utils"
 
 export const HomeLayout = () => {
-    const defaultTools = tools.reduce((acc, tool) => {
-        if (!acc[tool.category]) {
-            acc[tool.category] = []
-        }
-        acc[tool.category].push(tool)
-        return acc
-    }, {} as Record<string, typeof tools>);
-    const [category, setCategory] = useState("ALL");
-    const [filteredTools, setFilteredTools] = useState(defaultTools);
-    
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value.toLowerCase();
-        if (!value) {
-            onCategoryChange(category);
-            return;
-        }
-        if (category === "ALL") {
-            const newFilteredTools = tools.reduce((acc, tool) => {
-                if (tool.name.toLowerCase().includes(value) || tool.description.toLowerCase().includes(value)) {
-                    if (!acc[tool.category]) {
-                        acc[tool.category] = []
-                    }
-                    acc[tool.category].push(tool)
-                }
-                return acc;
-            }
-            , {} as Record<string, typeof tools>);
-            setFilteredTools(newFilteredTools);
-        } else {
-            const newFilteredTools = tools.reduce((acc, tool) => {
-                if (tool.category === category && (tool.name.toLowerCase().includes(value) || tool.description.toLowerCase().includes(value))) {
-                    if (!acc[tool.category]) {
-                        acc[tool.category] = []
-                    }
-                    acc[tool.category].push(tool)
-                }
-                return acc;
-            }
-            , {} as Record<string, typeof tools>);
-            setFilteredTools(newFilteredTools);
-        }
-    };
-    const onCategoryChange = (value: string) => {
-        setCategory(value);
-        if (value === "ALL") {
-            setFilteredTools(defaultTools);
-            return;
-        }
-        const newFilteredTools = tools.reduce((acc, tool) => {
-            if (tool.category === value) {
-                if (!acc[tool.category]) {
-                    acc[tool.category] = []
-                }
-                acc[tool.category].push(tool)
-            }
-            return acc;
-        }
-        , {} as Record<string, typeof tools>);  
-        setFilteredTools(newFilteredTools);
-    };
-    const categories = Object.keys(defaultTools).sort();
+  const categories = useMemo(() => ["ALL", ...Array.from(new Set(tools.map((t) => t.category))).sort()], [])
+  const [category, setCategory] = useState("ALL")
+  const [query, setQuery] = useState("")
 
-    return <div className="flex flex-col items-center mb-4 gap-2">
-        <div className="flex flex-row justify-end items-end mb-4 gap-2 w-full">
-            <div className="space-y-2">
-              <Label htmlFor="input-base">Input Base</Label>
-              <Select value={category} onValueChange={onCategoryChange}>
-                <SelectTrigger id="input-base">
-                  <SelectValue placeholder="Select base" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem key='ALL' value='ALL'>
-                      All
-                    </SelectItem>
-                    {categories.map((value) => (
-                        <SelectItem key={value} value={value}>
-                        {value}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="w-full sm:max-w-md space-y-2">
-                <Label htmlFor="tool-search" className="sr-only">
-                    Search tools
-                </Label>
-                <input
-                    id="tool-search"
-                    type="search"
-                    placeholder="Search tools..."
-                    onChange={handleSearchChange}
-                    className="border border-input bg-background rounded-md p-2 w-full"
-                />
-            </div>
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    return tools.filter((t) => {
+      const inCategory = category === "ALL" || t.category === category
+      const inQuery = !q || `${t.name} ${t.description}`.toLowerCase().includes(q)
+      return inCategory && inQuery
+    })
+  }, [category, query])
+
+  // Group the visible tools by category, preserving category order.
+  const grouped = useMemo(() => {
+    const order = Array.from(new Set(tools.map((t) => t.category)))
+    return order
+      .map((cat) => ({ cat, items: filtered.filter((t) => t.category === cat) }))
+      .filter((g) => g.items.length > 0)
+  }, [filtered])
+
+  return (
+    <div className="space-y-8">
+      {/* Controls */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap gap-1.5">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setCategory(cat)}
+              aria-pressed={category === cat}
+              className={cn(
+                "rounded-full border px-3 py-1 text-sm font-medium transition-colors",
+                category === cat
+                  ? "border-primary/30 bg-primary/10 text-primary"
+                  : "border-border text-muted-foreground hover:bg-secondary hover:text-foreground",
+              )}
+            >
+              {cat === "ALL" ? "All" : cat}
+            </button>
+          ))}
         </div>
-        {categories.map((groupName) => {
-            return filteredTools[groupName]?.length > 0 && <div key={groupName} className="p-4 w-full">
-            <h2 className="text-2xl font-semibold">{groupName}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {filteredTools[groupName].map((tool) => (
-                <Card key={tool.href} className="hover:shadow-md transition-shadow">
-                    <CardHeader className="pb-2">
-                    <CardTitle className="flex items-center gap-2">
+        <div className="relative w-full sm:max-w-xs">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <input
+            type="search"
+            aria-label="Search tools"
+            placeholder="Search tools..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="h-9 w-full rounded-md border border-input bg-background pl-9 pr-3 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-ring"
+          />
+        </div>
+      </div>
+
+      {grouped.length === 0 ? (
+        <p className="py-12 text-center text-muted-foreground">No tools match your search.</p>
+      ) : (
+        grouped.map(({ cat, items }) => (
+          <div key={cat}>
+            <h2 className="mb-4 text-lg font-semibold tracking-tight">{cat}</h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {items.map((tool) => (
+                <Link key={tool.href} href={tool.href} className="group block">
+                  <Card className="h-full transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md">
+                    <CardContent className="p-5">
+                      <div className="mb-4 grid h-10 w-10 place-items-center rounded-lg border border-border bg-secondary text-muted-foreground transition-colors group-hover:border-primary/30 group-hover:bg-primary/10 group-hover:text-primary">
                         {tool.icon}
-                        {tool.name}
-                    </CardTitle>
-                    <CardDescription>{tool.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                    <Link href={tool.href} passHref>
-                        <Button className="w-full">Open Tool</Button>
-                    </Link>
+                      </div>
+                      <div className="flex items-center justify-between gap-2">
+                        <h3 className="font-semibold tracking-tight">{tool.name}</h3>
+                        <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground" />
+                      </div>
+                      <p className="mt-1 text-sm text-muted-foreground">{tool.description}</p>
                     </CardContent>
-                </Card>
-                ))}
+                  </Card>
+                </Link>
+              ))}
             </div>
-            </div>
-        })}
+          </div>
+        ))
+      )}
     </div>
+  )
 }

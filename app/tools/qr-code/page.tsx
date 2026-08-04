@@ -1,10 +1,16 @@
 import { Metadata } from "next";
 import { qrCodeMetadata } from "@/lib/metadata_constants";
+import { ToolJsonLd } from "@/components/tool-json-ld";
+import { ToolContent } from "@/components/tool-content";
 import { QrCodeGeneratorLayout } from "./QrCodeGeneratorLayout";
 
 export const metadata: Metadata = qrCodeMetadata;
 export default function QrCodeGeneratorPage() {
   return (
-    <QrCodeGeneratorLayout />
+    <>
+      <ToolJsonLd href="/tools/qr-code" />
+      <QrCodeGeneratorLayout />
+      <ToolContent href="/tools/qr-code" />
+    </>
   )
 }

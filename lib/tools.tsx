@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import {
   FileText,
   FileImage,
@@ -16,118 +17,26 @@ import {
   Binary,
   ImageIcon,
 } from "lucide-react"
+import { toolsMeta } from "./tools-meta"
 
-export const tools = [
-  {
-    name: "OCR Tool",
-    description: "Extract text from images",
-    href: "/tools/ocr",
-    icon: <FileText className="h-4 w-4" />,
-    category: "Image",
-  },
-  {
-    name: "Image to Base64",
-    description: "Convert images to base64 encoding",
-    href: "/tools/image-to-base64",
-    icon: <FileImage className="h-4 w-4" />,
-    category: "Image",
-  },
-  {
-    name: "Image Converter",
-    description: "Convert between image formats",
-    href: "/tools/image-converter",
-    icon: <ImageIcon className="h-4 w-4" />,
-    category: "Image",
-  },
-  {
-    name: "Character Counter",
-    description: "Count characters, words, and lines in text",
-    href: "/tools/character-counter",
-    icon: <Hash className="h-4 w-4" />,
-    category: "Utility",
-  },
-  {
-    name: "UUID Generator",
-    description: "Generate random UUIDs",
-    href: "/tools/uuid-generator",
-    icon: <Fingerprint className="h-4 w-4" />,
-    category: "Developer",
-  },
-  {
-    name: "Random Number",
-    description: "Generate random numbers with custom ranges",
-    href: "/tools/random-number",
-    icon: <Dice5 className="h-4 w-4" />,
-    category: "Developer",
-  },
-  {
-    name: "QR Code Generator",
-    description: "Create QR codes from text or URLs",
-    href: "/tools/qr-code",
-    icon: <QrCode className="h-4 w-4" />,
-    category: "Developer",
-  },
-  {
-    name: "JWT Decoder",
-    description: "Decode and verify JWT tokens",
-    href: "/tools/jwt-decoder",
-    icon: <Key className="h-4 w-4" />,
-    category: "Developer",
-  },
-  {
-    name: "Interest Calculator",
-    description: "Calculate simple and compound interest",
-    href: "/tools/interest-calculator",
-    icon: <Percent className="h-4 w-4" />,
-    category: "Finance",
-  },
-  {
-    name: "Loan EMI Calculator",
-    description: "Calculate loan EMIs and payment schedules",
-    href: "/tools/loan-calculator",
-    icon: <Calculator className="h-4 w-4" />,
-    category: "Finance",
-  },
-  {
-    name: "Metric Converter",
-    description: "Convert between different units of measurement",
-    href: "/tools/metric-converter",
-    icon: <Ruler className="h-4 w-4" />,
-    category: "Utility",
-  },
-  {
-    name: "Time Zone Converter",
-    description: "Convert times between different time zones",
-    href: "/tools/time-zone",
-    icon: <Clock className="h-4 w-4" />,
-    category: "Utility",
-  },
-  {
-    name: "Date Calculator",
-    description: "Calculate differences between dates",
-    href: "/tools/date-calculator",
-    icon: <Calendar className="h-4 w-4" />,
-    category: "Utility",
-  },
-  {
-    name: "Hash Generator",
-    description: "Generate MD5, SHA-1, SHA-256 hashes",
-    href: "/tools/hash-generator",
-    icon: <BarChart className="h-4 w-4" />,
-    category: "Developer",
-  },
-  {
-    name: "Color Converter",
-    description: "Convert between HEX, RGB, HSL color formats",
-    href: "/tools/color-converter",
-    icon: <Palette className="h-4 w-4" />,
-    category: "Design",
-  },
-  {
-    name: "Base Converter",
-    description: "Convert numbers between different bases",
-    href: "/tools/base-converter",
-    icon: <Binary className="h-4 w-4" />,
-    category: "Developer",
-  },
-]
+// Icons keyed by href, kept separate from the pure metadata in tools-meta.ts.
+const icons: Record<string, ReactNode> = {
+  "/tools/ocr": <FileText className="h-4 w-4" />,
+  "/tools/image-to-base64": <FileImage className="h-4 w-4" />,
+  "/tools/image-converter": <ImageIcon className="h-4 w-4" />,
+  "/tools/character-counter": <Hash className="h-4 w-4" />,
+  "/tools/uuid-generator": <Fingerprint className="h-4 w-4" />,
+  "/tools/random-number": <Dice5 className="h-4 w-4" />,
+  "/tools/qr-code": <QrCode className="h-4 w-4" />,
+  "/tools/jwt-decoder": <Key className="h-4 w-4" />,
+  "/tools/interest-calculator": <Percent className="h-4 w-4" />,
+  "/tools/loan-calculator": <Calculator className="h-4 w-4" />,
+  "/tools/metric-converter": <Ruler className="h-4 w-4" />,
+  "/tools/time-zone": <Clock className="h-4 w-4" />,
+  "/tools/date-calculator": <Calendar className="h-4 w-4" />,
+  "/tools/hash-generator": <BarChart className="h-4 w-4" />,
+  "/tools/color-converter": <Palette className="h-4 w-4" />,
+  "/tools/base-converter": <Binary className="h-4 w-4" />,
+}
+
+export const tools = toolsMeta.map((meta) => ({ ...meta, icon: icons[meta.href] }))
