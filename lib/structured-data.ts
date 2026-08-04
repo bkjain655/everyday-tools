@@ -20,6 +20,19 @@ export function breadcrumbLd(trail: Crumb[]) {
   }
 }
 
+/** FAQPage schema from a list of question/answer pairs. */
+export function faqLd(faqs: { question: string; answer: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: { "@type": "Answer", text: f.answer },
+    })),
+  }
+}
+
 /** SoftwareApplication schema for an individual tool page. */
 export function toolAppLd({ name, description, path }: { name: string; description: string; path: string }) {
   return {
