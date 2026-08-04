@@ -25,20 +25,24 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <Script id="ga-analytics" 
-            strategy="afterInteractive"
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}>
-        </Script>
-        <Script id="ga-analytics-init" strategy="afterInteractive">
-            {
-                // send_page_view: false - GoogleAnalyticsProvider owns pageviews,
-                // including the initial one, so they are not counted twice.
-                `window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${GA_TRACKING_ID}', { send_page_view: false });`
-            }
-        </Script>
+        {GA_TRACKING_ID && (
+          <>
+            <Script id="ga-analytics"
+                strategy="afterInteractive"
+                src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}>
+            </Script>
+            <Script id="ga-analytics-init" strategy="afterInteractive">
+                {
+                    // send_page_view: false - GoogleAnalyticsProvider owns pageviews,
+                    // including the initial one, so they are not counted twice.
+                    `window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${GA_TRACKING_ID}', { send_page_view: false });`
+                }
+            </Script>
+          </>
+        )}
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
@@ -55,7 +59,7 @@ export default function RootLayout({
           </div>
         </ThemeProvider>
         <SpeedInsights />
-        <GoogleAnalyticsProvider />
+        {GA_TRACKING_ID && <GoogleAnalyticsProvider />}
         <Analytics />
         <ToasterWrapper />
         <AppCommandPalette />
